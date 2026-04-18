@@ -2,12 +2,27 @@
 
 A full-stack web application for tracking crop progress across multiple fields during a growing season.
 
+## Live Links
+
+- **Frontend:** https://shambarecords.netlify.app/
+- **Backend:** https://shambarecords-backend-production.up.railway.app/
+- **Repository:** https://github.com/Arielpoghon/shambarecords
+
 ## Demo Credentials
 
 | Role | Email | Password |
 |------|-------|----------|
 | Admin | admin@smartseason.com | password |
 | Field Agent | agent@smartseason.com | password |
+
+## Requirements Coverage
+
+- **Users & Access:** JWT authentication with `admin` and `agent` roles plus role-based access to relevant data
+- **Field Management:** Admins can create fields, edit field details, assign/unassign agents, and delete fields
+- **Field Updates:** Field agents can update stage and add observations; admins can monitor all fields and updates
+- **Field Stages:** `planted`, `growing`, `ready`, `harvested`
+- **Field Status Logic:** Computed `active`, `at_risk`, and `completed` statuses based on stage and planting age
+- **Dashboard:** Separate admin and agent dashboards with totals, status breakdowns, and recent field visibility
 
 ## Tech Stack
 
@@ -53,7 +68,7 @@ npm start
 
 For local development, the CRA dev server proxies `/api` requests to `http://localhost:5000` via `frontend/package.json`.
 
-For production deployment on Vercel, set:
+For production deployment on Netlify, set:
 ```bash
 REACT_APP_API_URL=https://your-railway-app.up.railway.app/api
 ```
@@ -95,11 +110,11 @@ This logic flags fields that may need attention from coordinators without requir
 ## Deployment
 
 Deploy backend to Railway with the included PostgreSQL service and set `DATABASE_URL` plus `JWT_SECRET`.
-Deploy frontend to Vercel and set `REACT_APP_API_URL` to your Railway backend URL with the `/api` suffix.
+Deploy frontend to Netlify and set `REACT_APP_API_URL` to your Railway backend URL with the `/api` suffix.
 
 Example:
 ```bash
-REACT_APP_API_URL=https://smartseason-production.up.railway.app/api
+REACT_APP_API_URL=https://shambarecords-backend-production.up.railway.app/api
 ```
 
 ## Assumptions
