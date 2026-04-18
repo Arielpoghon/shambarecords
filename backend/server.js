@@ -9,9 +9,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const connectionString = process.env.DATABASE_URL;
+const shouldUseSsl = process.env.PGSSL === 'true' || /rlwy\.net|railway\.app/.test(connectionString || '');
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  connectionString,
+  ssl: shouldUseSsl ? { rejectUnauthorized: false } : false
 });
 
 const JWT_SECRET = process.env.JWT_SECRET || 'smartseason_secret_2024';
