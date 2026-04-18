@@ -1,0 +1,6 @@
+.codex
+backend/node_modules
+frontend/node_modules
+frontend/build
+.env
+backend/.env
