@@ -5,13 +5,23 @@ import { useAuth } from '../AuthContext';
 export default function Dashboard() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const { user } = useAuth();
 
   useEffect(() => {
-    getDashboard().then(res => { setData(res.data); setLoading(false); });
+    getDashboard()
+      .then(res => {
+        setData(res.data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.response?.data?.error || 'Unable to load dashboard');
+        setLoading(false);
+      });
   }, []);
 
   if (loading) return <div className="page"><p>Loading...</p></div>;
+  if (error) return <div className="page"><div className="alert alert-error">{error}</div></div>;
 
   const { summary, fields } = data;
 
