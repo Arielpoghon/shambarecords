@@ -67,17 +67,20 @@ const computeStatus = (field) => {
 // AUTH ROUTES
 app.post('/api/auth/login', async (req, res) => {
   const { email, password } = req.body;
+  let step = 'query';
   try {
     const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
     const user = result.rows[0];
     if (!user) return res.status(400).json({ error: 'Invalid credentials' });
+    step = 'compare';
     const valid = bcrypt.compareSync(password, user.password);
     if (!valid) return res.status(400).json({ error: 'Invalid credentials' });
+    step = 'sign';
     const token = jwt.sign({ id: user.id, role: user.role, name: user.name }, JWT_SECRET, { expiresIn: '7d' });
     res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
   } catch (err) {
-    console.error('Login error:', err);
-    res.status(500).json({ error: err?.message || 'Login failed' });
+    console.error(`Login error during ${step}:`, err);
+    res.status(500).json({ error: `${step}: ${err?.message || String(err) || 'unknown error'}` });
   }
 });
 
